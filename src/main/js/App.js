@@ -1,6 +1,9 @@
 import React from 'react';
 import logo from '../img/logo.svg';
 import '../css/App.css';
+import Chance from "chance"
+
+const chance = new Chance();
 
 class ReactiveTable extends React.Component {
   state = {
@@ -14,14 +17,16 @@ class ReactiveTable extends React.Component {
   componentDidMount() {
     const data = [];
 
-    for (let i = 1; i <= 10; i++) {
-      const name = 'Account' + i;
-      const value = i;
+    for(let i = 0; i < 20; i++) {
+        const id = chance.guid();
+        const name = chance.name();
+        const email = chance.email();
+        const phoneNumber = chance.phone();
 
-      data.push({ name, value });
+        data.push({id, name, email, phoneNumber})
     }
 
-    this.setState({ data });
+    this.setState({data})
   }
 
   render() {
@@ -30,7 +35,8 @@ class ReactiveTable extends React.Component {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Data</th>
+            <th>Email</th>
+            <th>Phone</th>
           </tr>
         </thead>
         <tbody>
@@ -38,7 +44,8 @@ class ReactiveTable extends React.Component {
             return (
               <tr>
                 <td>{item.name}</td>
-                <td>{item.value}</td>
+                <td>{item.email}</td>
+                <td>{item.phoneNumber}</td>
               </tr>
             );
           })}
