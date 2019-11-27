@@ -31,6 +31,17 @@ class Table extends React.Component {
         this.setState({ data });
     }
 
+    deleteRow(item) {
+        let participants = this.state.data;
+        let index = participants.findIndex(({id}) => id === item.id);
+        participants.splice(index, 1);
+        this.setState(participants);
+    }
+
+    editRow(item) {
+        //
+    }
+
     render() {
         return (
             <div>
@@ -39,25 +50,25 @@ class Table extends React.Component {
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
+                        <th>E-mail address</th>
+                        <th>Phone number</th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.data.map((item, index) => {
                         return (
-                            <tr>
+                            <tr key={item.id}>
                                 <td>{item.name}</td>
                                 <td>{item.email}</td>
                                 <td>{item.phoneNumber}</td>
                                 <td>
                                     <span>
-                                        <img src={edit_icon} alt="edit" className="actionIcon"/>
+                                        <img src={edit_icon} alt="edit" className="actionIcon" onClick={() => this.editRow(item)}/>
                                     </span>
                                 </td>
                                 <td>
                                     <span>
-                                        <img src={delete_icon} alt="delete" className="actionIcon"/>
+                                        <img src={delete_icon} alt="delete" className="actionIcon" onClick={() => this.deleteRow(item)}/>
                                     </span>
                                 </td>
                             </tr>
