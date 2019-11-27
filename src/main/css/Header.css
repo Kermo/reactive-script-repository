@@ -1,0 +1,17 @@
+.header {
+    padding: 32px;
+    width: 100%;
+    background-color: #abb5bd;
+    display: flex;
+}
+
+.logo {
+    height: 32px;
+    margin-right: 10px;
+}
+
+.companyName {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 600;
+}
