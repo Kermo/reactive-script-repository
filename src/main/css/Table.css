@@ -1,0 +1,7 @@
+.actionIcon {
+    height: 24px;
+    width: 24px;
+
+    /* black to #909090 */
+    filter: invert(63%) sepia(0%) saturate(527%) hue-rotate(229deg) brightness(92%) contrast(84%);
+}
