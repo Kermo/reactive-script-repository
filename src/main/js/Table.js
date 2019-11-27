@@ -7,16 +7,25 @@ import Chance from 'chance';
 const chance = new Chance();
 
 class Table extends React.Component {
-    state = {
-        data: [],
-        sort: {
-            column: '',
-            sort: 'desc',
-        },
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            participants: [],
+            name: '',
+            email: '',
+            phoneNumber: '',
+            sort: {
+                name: 'asc',
+                email: 'asc',
+                phone: 'asc'
+            },
+        };
+        this.addParticipant = this.addParticipant.bind(this);
+    }
+
 
     componentDidMount() {
-        const data = [];
+        const participants = [];
 
         // Create randomized participant data
         for (let i = 0; i < 20; i++) {
@@ -25,14 +34,20 @@ class Table extends React.Component {
             const email = chance.email();
             const phoneNumber = chance.phone();
 
-            data.push({ id, name, email, phoneNumber });
+            participants.push({ id, name, email, phoneNumber });
         }
 
-        this.setState({ data });
+        this.setState({ participants });
+    }
+
+    change(e){
+        this.setState({
+            [e.target.name]:e.target.value
+        });
     }
 
     deleteRow(item) {
-        let participants = this.state.data;
+        let participants = this.state.participants;
         let index = participants.findIndex(({id}) => id === item.id);
         participants.splice(index, 1);
         this.setState(participants);
@@ -42,10 +57,71 @@ class Table extends React.Component {
         //
     }
 
+    addParticipant(e) {
+        e.preventDefault();
+
+        let newParticipant = {
+            id : chance.guid(),
+            name : this.state.name,
+            email : this.state.email,
+            phoneNumber : this.state.phoneNumber
+        };
+
+        let participants = this.state.participants;
+        participants.push(newParticipant);
+        this.setState(participants)
+
+        this.setState( {
+            name : '',
+            email : '',
+            phoneNumber: ''
+        });
+    }
+
     render() {
         return (
             <div>
                 <h1>List of participants</h1>
+                <div>
+                    <form onSubmit={this.addParticipant}>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text"
+                                               className="form-control"
+                                               name="name"
+                                               value={this.state.name}
+                                               placeholder="Enter Name"
+                                               onChange = {(event) => this.change(event)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               className="form-control"
+                                               name="email"
+                                               value={this.state.email}
+                                               placeholder="Enter Email"
+                                               onChange = {(event) => this.change(event)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               className="form-control"
+                                               name="phoneNumber"
+                                               value={this.state.phoneNumber}
+                                               placeholder="Enter Phone"
+                                               onChange = {(event) => this.change(event)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <button type="submit">Add new</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
                 <table>
                     <thead>
                     <tr>
@@ -55,7 +131,7 @@ class Table extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.data.map((item, index) => {
+                    {this.state.participants.map((item, index) => {
                         return (
                             <tr key={item.id}>
                                 <td>{item.name}</td>
