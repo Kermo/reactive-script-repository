@@ -34,8 +34,15 @@ class Table extends React.Component {
                 email: 'asc',
                 phoneNumber: 'asc'
             },
+            editing: false,
+            editId: '',
+            editName: '',
+            editEmail: '',
+            editPhoneNumber: ''
         };
+
         this.addParticipant = this.addParticipant.bind(this);
+        this.editParticipant = this.editParticipant.bind(this);
         this.sortItems = this.sortItems.bind(this);
     }
 
@@ -109,8 +116,32 @@ class Table extends React.Component {
         this.setState(participants);
     }
 
-    editRow(item) {
-        //
+    editRow(item) {
+        this.setState({editing: true});
+        this.setState({
+            editId: item.id,
+            editName: item.name,
+            editEmail: item.email,
+            editPhoneNumber: item.phoneNumber
+        })
+    }
+
+
+    updateParticipant(e) {
+        e.preventDefault();
+
+        let participants = this.state.participants;
+        let index = participants.findIndex(({id}) => id === this.state.editId);
+
+        participants[index] = {
+            name: this.state.editName,
+            email: this.state.editEmail,
+            phoneNumber: this.state.editPhoneNumber
+        };
+
+        this.setState(participants);
+
+        this.setState({editing: false});
     }
 
     sortItems(key) {
@@ -151,58 +182,74 @@ class Table extends React.Component {
         }
     }
 
+    editParticipant() {
+        return (
+            <form class="form">
+                <div>
+                    <input type="text" name="editName" className="form-control"
+                            onChange = {(e) => this.change(e)}
+                            value = {this.state.editName} />
+                </div>
+                <div>
+                    <input type="text" name="editEmail" className="form-control"
+                           onChange = {(e) => this.change(e)}
+                           value = {this.state.editEmail} />
+                </div>
+                <div>
+                    <input type="text" name="editPhoneNumber" className="form-control"
+                           onChange = {(e) => this.change(e)}
+                           value = {this.state.editPhoneNumber} />
+                </div>
+                <button type="button" className = "btn-save" onClick={(e) => {this.updateParticipant(e)}}>Save</button>
+                <button type="button" className = "btn-cancel"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({editing: false});
+                        }}>Cancel</button>
+            </form>
+        )
+    }
+
     render() {
         return (
             <div>
                 <h1 className="heading">List of participants</h1>
                 <div>
-                    <form onSubmit={this.addParticipant}>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div className={`form-group ${this.errorClass(this.state.formErrors.name)}`}>
-                                            <input type="text"
-                                                   required
-                                                   className="form-control"
-                                                   name="name"
-                                                   value={this.state.name}
-                                                   placeholder="Full name"
-                                                   onChange = {(event) => this.change(event)}
-                                            />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
-                                            <input type="text"
-                                                   required
-                                                   className="form-control"
-                                                   name="email"
-                                                   value={this.state.email}
-                                                   placeholder="E-mail address"
-                                                   onChange = {(event) => this.change(event)}
-                                            />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={`form-group ${this.errorClass(this.state.formErrors.phoneNumber)}`}>
-                                            <input type="text"
-                                                   required
-                                                   className="form-control"
-                                                   name="phoneNumber"
-                                                   value={this.state.phoneNumber}
-                                                   placeholder="Phone number"
-                                                   onChange = {(event) => this.change(event)}
-                                            />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button type="submit">Add new</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
+                    <div className="form-main">
+                        <form onSubmit={this.addParticipant} className="form">
+                            <div className={this.errorClass(this.state.formErrors.name)}>
+                                <input type="text"
+                                       required
+                                       className="form-control"
+                                       name="name"
+                                       value={this.state.name}
+                                       placeholder="Full name"
+                                       onChange = {(event) => this.change(event)}
+                                />
+                            </div>
+                            <div className={this.errorClass(this.state.formErrors.email)}>
+                                <input type="text"
+                                       required
+                                       className="form-control"
+                                       name="email"
+                                       value={this.state.email}
+                                       placeholder="E-mail address"
+                                       onChange = {(event) => this.change(event)}
+                                />
+                            </div>
+                            <div className={this.errorClass(this.state.formErrors.phoneNumber)}>
+                                <input type="text"
+                                       required
+                                       className="form-control"
+                                       name="phoneNumber"
+                                       value={this.state.phoneNumber}
+                                       placeholder="Phone number"
+                                       onChange = {(event) => this.change(event)}
+                                />
+                            </div>
+                            <button className="btn-add" type="submit">Add new</button>
+                        </form>
+                    </div>
                 </div>
                 <table>
                     <thead>
@@ -219,23 +266,28 @@ class Table extends React.Component {
                             <span>Phone number</span>
                             <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['phoneNumber']} className={this.state.sort["phoneNumber"] === "asc" ? "sortDown" : "sortUp"} />
                         </th>
+                        <th width="100"></th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.participants.map((item, index) => {
                         return (
-                            <tr key={item.id}>
-                                <td>{item.name}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phoneNumber}</td>
+                            <tr key={item.id} className="item">
                                 <td>
-                                    <span>
-                                        <img src={edit_icon} alt="edit" className="actionIcon" onClick={() => this.editRow(item)}/>
-                                    </span>
+                                    <span>{item.name}</span>
+                                </td>
+                                <td>
+                                    <span>{item.email}</span>
+                                </td>
+                                <td>
+                                    <span>{item.phoneNumber}</span>
                                 </td>
                                 <td>
                                     <span>
                                         <img src={delete_icon} alt="delete" className="actionIcon" onClick={() => this.deleteRow(item)}/>
+                                    </span>
+                                    <span>
+                                        <img src={edit_icon} alt="edit" className="actionIcon" onClick={() => this.editRow(item)}/>
                                     </span>
                                 </td>
                             </tr>
@@ -243,6 +295,11 @@ class Table extends React.Component {
                     })}
                     </tbody>
                 </table>
+                <div hidden={!this.state.editing}>
+                    {
+                        this.editParticipant()
+                    }
+                </div>
             </div>
         );
     }

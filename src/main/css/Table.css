@@ -70,13 +70,12 @@ input {
     border: 1px solid #eeeeee;
     background: #fafafa;
     padding: 10px 16px;
-    margin-left: 16px;
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
     outline: none;
 }
+
 input:focus {
     border: 1px solid #e0dddd;
 }
@@ -85,6 +84,14 @@ input:focus {
     background: #fff;
     padding: 20px;
     margin-bottom: 10px;
+}
+
+.form .btn-add {
+    float: right;
+}
+
+.form-control {
+    width: 160px;
 }
 
 .form > div {
@@ -96,12 +103,29 @@ input:focus {
     margin-left: 16px;
 }
 
-.table tr th:nth-child(1) {
+.form-header input {
+    display: inline;
+}
+
+.form > div:nth-child(1) .form-control {
+    width: 150px;
+}
+
+.form > div:nth-child(2) .form-control {
+    width: 230px;
+}
+
+
+table tr th:nth-child(1) {
     width: 220px;
 }
 
-.table tr th:nth-child(2) {
+table tr th:nth-child(2) {
     width: 280px;
+}
+
+button + button {
+    margin-right: 10px;
 }
 
 .heading {
@@ -129,4 +153,47 @@ input:focus {
     position: relative;
     top: 2px;
     left: 10px;
+}
+
+.btn-save {
+    font-size: 16px;
+    background: #07f;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: all, 0.3s;
+}
+
+.btn-cancel {
+    font-size: 16px;
+    background: #eaeaea;
+    color: #07f;
+    font-weight: 500;
+    border: none;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: all, 0.3s;
+}
+
+.form .btn-cancel,
+.form .btn-save {
+    float: right;
+}
+
+.has-error {
+    border: 2px dashed red;
+}
+
+.btn-add {
+    font-size: 16px;
+    background: #eaeaea;
+    color: #757575;
+    font-weight: 500;
+    border: none;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: all, 0.3s;
+    float: right;
 }
