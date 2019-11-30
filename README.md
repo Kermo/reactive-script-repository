@@ -35,7 +35,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # Setup
 
 - Clone or download this repository
-- Run `cd reactive-table` to move to projetct directory
+- Run `cd reactive-table` to move to the project directory
 - Run `npm install` to install its dependencies
 - Run `npm start` to start the React app.
 
