@@ -320,16 +320,22 @@ class Table extends React.Component {
                     <thead>
                     <tr>
                         <th onClick={() => this.sortItems('name')}>
-                            <span>Name</span>
-                            <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['name']} className={this.state.sort["name"] === "asc" ? "sortDown" : "sortUp"} />
+                            <div className="header-item">
+                                <span>Name</span>
+                                <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['name']} className={this.state.sort["name"] === "asc" ? "sortDown" : "sortUp"} />
+                            </div>
                         </th>
                         <th onClick={() => this.sortItems('email')}>
-                            <span>E-mail address</span>
-                            <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['email']} className={this.state.sort["email"] === "asc" ? "sortDown" : "sortUp"} />
+                            <div className="header-item">
+                                <span>E-mail address</span>
+                                <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['email']} className={this.state.sort["email"] === "asc" ? "sortDown" : "sortUp"} />
+                            </div>
                         </th>
                         <th onClick={() => this.sortItems('phoneNumber')}>
-                            <span>Phone number</span>
-                            <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['phoneNumber']} className={this.state.sort["phoneNumber"] === "asc" ? "sortDown" : "sortUp"} />
+                            <div className="header-item">
+                                <span>Phone number</span>
+                                <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['phoneNumber']} className={this.state.sort["phoneNumber"] === "asc" ? "sortDown" : "sortUp"} />
+                            </div>
                         </th>
                         <th width="100"></th>
                     </tr>
@@ -337,15 +343,21 @@ class Table extends React.Component {
                     <tbody>
                     {this.state.participants.map((item, index) => {
                         return (
-                            <tr key={item.id} className="item">
+                            <tr key={item.id}>
                                 <td>
-                                    <span>{item.name}</span>
+                                    <div className="item">
+                                        <span>{item.name}</span>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span>{item.email}</span>
+                                    <div className="item">
+                                        <span>{item.email}</span>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span>{item.phoneNumber}</span>
+                                    <div className="item">
+                                        <span>{item.phoneNumber}</span>
+                                    </div>
                                 </td>
                                 <td>
                                     <span>

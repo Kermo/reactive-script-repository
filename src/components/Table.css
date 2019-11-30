@@ -86,6 +86,14 @@ input:focus {
     margin-bottom: 10px;
 }
 
+table .item {
+    line-height: 24px;
+}
+
+thead .header-item {
+    line-height: 16px;
+}
+
 .form .btn-add {
     float: right;
 }

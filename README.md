@@ -23,7 +23,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
       Table.js
     README.md
     yarn.lock
-    app.yaml
     package.json
     .gitignore
 ```
