@@ -27,10 +27,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     .gitignore
 ```
 # Dependencies
-    "chance": "^1.1.3",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.2.0"
+    chance: 1.1.3
+    react: 16.12.0+
+    react-dom: 16.12.0+
+    react-scripts: 3.2.0
 
 # Setup
 
