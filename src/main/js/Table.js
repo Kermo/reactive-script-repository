@@ -18,12 +18,21 @@ class Table extends React.Component {
             formErrors: {
                 name: '',
                 email: '',
-                phoneNumber: ''
+                phoneNumber: '',
+            },
+            editFormErrors: {
+                name: '',
+                email: '',
+                phoneNumber: '',
             },
             nameValid: false,
             emailValid: false,
             phoneNumberValid: false,
+            editNameValid: false,
+            editEmailValid: false,
+            editPhoneNumberValid: false,
             formValid: true,
+            editFromValid: true,
             isSorted: {
                 name: false,
                 email: false,
@@ -43,6 +52,7 @@ class Table extends React.Component {
 
         this.addParticipant = this.addParticipant.bind(this);
         this.editParticipant = this.editParticipant.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.sortItems = this.sortItems.bind(this);
     }
 
@@ -73,22 +83,38 @@ class Table extends React.Component {
 
     validateField(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
+        let editFieldValidationErrors = this.state.editFormErrors;
         let nameValid = this.state.nameValid;
         let emailValid = this.state.emailValid;
         let phoneNumberValid = this.state.phoneNumberValid;
+        let editNameValid = this.state.editNameValid;
+        let editEmailValid = this.state.editEmailValid;
+        let editPhoneNumberValid = this.state.editPhoneNumberValid;
 
         switch (fieldName) {
             case 'name':
                 nameValid = value.length >= 6;
-                fieldValidationErrors.name = nameValid ? '' : ' is too short';
+                fieldValidationErrors.name = nameValid ? '' : 'name is too short';
                 break;
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                fieldValidationErrors.email = emailValid ? '' : 'email adress is invalid';
                 break;
             case 'phoneNumber':
-                phoneNumberValid = value.match(/^(?=.*[0-9])[- +()0-9]+$"]/i);
-                fieldValidationErrors.phoneNumber = phoneNumberValid ? '' : ' is invalid'
+                phoneNumberValid = value.match(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/);
+                fieldValidationErrors.phoneNumber = phoneNumberValid ? '' : 'phone number is invalid';
+                break;
+            case 'editName':
+                editNameValid = value.length >= 6;
+                editFieldValidationErrors.name = editNameValid ? '' : 'name is too short';
+                break;
+            case 'editEmail':
+                editEmailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                editFieldValidationErrors.email = editEmailValid ? '' : 'email adress is invalid';
+                break;
+            case 'editPhoneNumber':
+                editPhoneNumberValid = value.match(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/);
+                editFieldValidationErrors.phoneNumber = editPhoneNumberValid ? '' : 'phone number is invalid';
                 break;
             default:
                 break;
@@ -96,17 +122,36 @@ class Table extends React.Component {
 
         this.setState({
             formErrors: fieldValidationErrors,
+            editFormErrors: editFieldValidationErrors,
             nameValid: nameValid,
+            editNameValid: editNameValid,
             emailValid: emailValid,
-            phoneNumberValid: phoneNumberValid}, this.validateForm);
+            editEmailValid: editEmailValid,
+            phoneNumberValid: phoneNumberValid,
+            editPhoneNumberValid: editPhoneNumberValid}, this.validateForm);
     }
 
     validateForm() {
         this.setState({formValid: this.state.nameValid && this.state.emailValid && this.state.phoneNumberValid});
+        this.setState({editFormValid: this.state.editNameValid && this.state.editEmailValid && this.state.editPhoneNumberValid});
     }
 
     errorClass(error) {
         return(error.length === 0 ? '' : 'has-error')
+    }
+
+    handleCancel(e) {
+        e.preventDefault();
+
+        let editFormErrors = this.state.editFormErrors;
+        editFormErrors.name = editFormErrors.email = editFormErrors.phoneNumber = '';
+
+        this.setState({editing: false});
+        this.setState({editFormErrors: editFormErrors});
+        this.setState({
+            editNameValid: true,
+            editEmailValid: true,
+            editPhoneNumberValid: true});
     }
 
     deleteRow(item) {
@@ -130,24 +175,28 @@ class Table extends React.Component {
     updateParticipant(e) {
         e.preventDefault();
 
-        let participants = this.state.participants;
-        let index = participants.findIndex(({id}) => id === this.state.editId);
+        if (!this.state.editFormValid) {
+            //
+        } else {
+            let participants = this.state.participants;
+            let index = participants.findIndex(({id}) => id === this.state.editId);
 
-        participants[index] = {
-            name: this.state.editName,
-            email: this.state.editEmail,
-            phoneNumber: this.state.editPhoneNumber
-        };
+            participants[index] = {
+                name: this.state.editName,
+                email: this.state.editEmail,
+                phoneNumber: this.state.editPhoneNumber
+            };
 
-        this.setState(participants);
+            this.setState(participants);
 
-        this.setState({editing: false});
+            this.setState({editing: false});
+        }
     }
 
     sortItems(key) {
         this.setState({
             participants:this.state.participants.sort((a, b) => (
-                this.state.sort[key] === "asc" ? a[key] < b[key] : a[key] > b[key]
+                this.state.sort[key] === "asc" ? (a[key] < b[key] ? 1 : -1) : (a[key] > b[key] ? 1 : -1)
             )),
             sort: {
                 [key] : this.state.sort[key] === "asc" ? "desc" : "asc"
@@ -161,7 +210,8 @@ class Table extends React.Component {
     addParticipant(e) {
         e.preventDefault();
 
-        if (this.state.formValid) {
+        if (!this.state.formValid) {
+            //
         } else {
             let newParticipant = {
                 id: chance.guid(),
@@ -189,23 +239,29 @@ class Table extends React.Component {
                     <input type="text" name="editName" className="form-control"
                             onChange = {(e) => this.change(e)}
                             value = {this.state.editName} />
+                    <div>
+                        <span className="error-msg">{this.state.editFormErrors.name}</span>
+                    </div>
                 </div>
                 <div>
                     <input type="text" name="editEmail" className="form-control"
                            onChange = {(e) => this.change(e)}
                            value = {this.state.editEmail} />
+                    <div>
+                        <span className="error-msg">{this.state.editFormErrors.email}</span>
+                    </div>
                 </div>
                 <div>
                     <input type="text" name="editPhoneNumber" className="form-control"
                            onChange = {(e) => this.change(e)}
                            value = {this.state.editPhoneNumber} />
+                    <div>
+                        <span className="error-msg">{this.state.editFormErrors.phoneNumber}</span>
+                    </div>
                 </div>
                 <button type="button" className = "btn-save" onClick={(e) => {this.updateParticipant(e)}}>Save</button>
                 <button type="button" className = "btn-cancel"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            this.setState({editing: false});
-                        }}>Cancel</button>
+                        onClick={(e) => {this.handleCancel(e)}}>Cancel</button>
             </form>
         )
     }
@@ -226,6 +282,9 @@ class Table extends React.Component {
                                        placeholder="Full name"
                                        onChange = {(event) => this.change(event)}
                                 />
+                                <div>
+                                    <span className="error-msg">{this.state.formErrors.name}</span>
+                                </div>
                             </div>
                             <div className={this.errorClass(this.state.formErrors.email)}>
                                 <input type="text"
@@ -236,6 +295,9 @@ class Table extends React.Component {
                                        placeholder="E-mail address"
                                        onChange = {(event) => this.change(event)}
                                 />
+                                <div>
+                                    <span className="error-msg">{this.state.formErrors.email}</span>
+                                </div>
                             </div>
                             <div className={this.errorClass(this.state.formErrors.phoneNumber)}>
                                 <input type="text"
@@ -246,6 +308,9 @@ class Table extends React.Component {
                                        placeholder="Phone number"
                                        onChange = {(event) => this.change(event)}
                                 />
+                                <div>
+                                    <span className="error-msg">{this.state.formErrors.phoneNumber}</span>
+                                </div>
                             </div>
                             <button className="btn-add" type="submit">Add new</button>
                         </form>

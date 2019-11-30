@@ -182,8 +182,14 @@ button + button {
     float: right;
 }
 
-.has-error {
-    border: 2px dashed red;
+.has-error input {
+    border: 1px solid red;
+}
+
+.error-msg {
+    position: absolute;
+    color: red;
+    font-size: 12px;
 }
 
 .btn-add {
