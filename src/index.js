@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './main/css/index.css';
-import App from "./main/js/App"
-import * as serviceWorker from './main/js/serviceWorker';
+import './index.css';
+import App from "./App"
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('table-app'));
 

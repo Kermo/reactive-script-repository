@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "./Header";
-import Table from "./Table";
-import "../css/App.css";
+import Header from "./components/Header";
+import Table from "./components/Table";
+import "./App.css";
 
 class App extends React.Component {
     render() {

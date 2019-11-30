@@ -2,7 +2,7 @@ import React from 'react';
 import edit_icon from '../img/edit.svg';
 import delete_icon from '../img/delete.svg';
 import arrow_icon from '../img/arrow.svg';
-import '../css/Table.css';
+import './Table.css';
 import Chance from 'chance';
 
 const chance = new Chance();
