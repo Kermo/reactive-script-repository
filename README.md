@@ -1,4 +1,4 @@
-# Reactive Table
+# Reactive Script Repository
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
 
@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # Folder Structure
 
 ```
-  reactive-table/
+  reactive-script-repository/
     src/
       App.css
       App.js
@@ -27,15 +27,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     .gitignore
 ```
 # Dependencies
-    "chance": "^1.1.3",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.2.0"
+    chance: 1.1.3
+    react: 16.12.0+
+    react-dom: 16.12.0+
+    react-scripts: 3.2.0
 
 # Setup
 
 - Clone or download this repository
-- Run `cd reactive-table` to move to projetct directory
+- Run `cd reactive-script-repository` to move to the project directory
 - Run `npm install` to install its dependencies
 - Run `npm start` to start the React app.
 
