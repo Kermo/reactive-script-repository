@@ -23,6 +23,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
       Table.js
     README.md
     yarn.lock
+    index.js
     package.json
     .gitignore
 ```
@@ -31,6 +32,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     react: 16.12.0+
     react-dom: 16.12.0+
     react-scripts: 3.2.0
+    express: 4.16.2+
+    mysql: 2.15.0+
 
 # Setup
 
