@@ -6,8 +6,8 @@ let app = express();
 
 app.use(function (req, res, next) {
     res.locals.connection = mysql.createConnection({
-        host: '35.195.85.88',
-        user: 'root',
+        host: '',
+        user: '',
         password: '',
         database: 'scriptrepository'
     });
