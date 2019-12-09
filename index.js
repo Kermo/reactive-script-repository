@@ -8,7 +8,7 @@ app.use(function (req, res, next) {
     res.locals.connection = mysql.createConnection({
         host: '35.195.85.88',
         user: 'root',
-        password: 'jospa3oviB!',
+        password: '',
         database: 'scriptrepository'
     });
     res.locals.connection.connect();
