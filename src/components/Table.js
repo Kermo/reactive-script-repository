@@ -4,6 +4,11 @@ import delete_icon from '../img/delete.svg';
 import arrow_icon from '../img/arrow.svg';
 import './Table.css';
 import Chance from 'chance';
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/theme-github"
+
 
 const chance = new Chance();
 
@@ -183,9 +188,6 @@ class Table extends React.Component {
                     })}
                     </tbody>
                 </table>
-                <div hidden={!this.state.editing}>
-
-                </div>
             </div>
         );
     }
