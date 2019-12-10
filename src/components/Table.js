@@ -11,66 +11,40 @@ class Table extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            participants: [],
+            scripts: [],
             name: '',
-            email: '',
-            phoneNumber: '',
-            formErrors: {
-                name: '',
-                email: '',
-                phoneNumber: '',
-            },
-            editFormErrors: {
-                name: '',
-                email: '',
-                phoneNumber: '',
-            },
-            nameValid: false,
-            emailValid: false,
-            phoneNumberValid: false,
-            editNameValid: false,
-            editEmailValid: false,
-            editPhoneNumberValid: false,
-            formValid: true,
-            editFromValid: true,
+            url: '',
+            description: '',
             isSorted: {
                 name: false,
-                email: false,
-                phoneNumber: false
+                url: false,
             },
             sort: {
                 name: 'asc',
-                email: 'asc',
-                phoneNumber: 'asc'
+                url: 'asc',
             },
             editing: false,
-            editId: '',
-            editName: '',
-            editEmail: '',
-            editPhoneNumber: ''
         };
 
-        this.addParticipant = this.addParticipant.bind(this);
-        this.editParticipant = this.editParticipant.bind(this);
+        this.addScript = this.addScript.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.sortItems = this.sortItems.bind(this);
     }
 
 
     componentDidMount() {
-        const participants = [];
+        const scripts = [];
 
         // Create randomized participant data
         for (let i = 0; i < 20; i++) {
             const id = chance.guid();
-            const name = chance.name();
-            const email = chance.email();
-            const phoneNumber = chance.phone();
+            const name = chance.file();
+            const url = chance.url();
 
-            participants.push({ id, name, email, phoneNumber });
+            scripts.push({ id, name, url });
         }
 
-        this.setState({ participants });
+        this.setState({ scripts });
     }
 
     change(e){
@@ -78,124 +52,31 @@ class Table extends React.Component {
         const value = e.target.value;
         this.setState({
             [name]:value
-        }, () => {this.validateField(name, value)});
-    }
-
-    validateField(fieldName, value) {
-        let fieldValidationErrors = this.state.formErrors;
-        let editFieldValidationErrors = this.state.editFormErrors;
-        let nameValid = this.state.nameValid;
-        let emailValid = this.state.emailValid;
-        let phoneNumberValid = this.state.phoneNumberValid;
-        let editNameValid = this.state.editNameValid;
-        let editEmailValid = this.state.editEmailValid;
-        let editPhoneNumberValid = this.state.editPhoneNumberValid;
-
-        switch (fieldName) {
-            case 'name':
-                nameValid = value.length >= 6;
-                fieldValidationErrors.name = nameValid ? '' : 'name is too short';
-                break;
-            case 'email':
-                emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : 'email adress is invalid';
-                break;
-            case 'phoneNumber':
-                phoneNumberValid = value.match(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/);
-                fieldValidationErrors.phoneNumber = phoneNumberValid ? '' : 'phone number is invalid';
-                break;
-            case 'editName':
-                editNameValid = value.length >= 6;
-                editFieldValidationErrors.name = editNameValid ? '' : 'name is too short';
-                break;
-            case 'editEmail':
-                editEmailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                editFieldValidationErrors.email = editEmailValid ? '' : 'email adress is invalid';
-                break;
-            case 'editPhoneNumber':
-                editPhoneNumberValid = value.match(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/);
-                editFieldValidationErrors.phoneNumber = editPhoneNumberValid ? '' : 'phone number is invalid';
-                break;
-            default:
-                break;
-        }
-
-        this.setState({
-            formErrors: fieldValidationErrors,
-            editFormErrors: editFieldValidationErrors,
-            nameValid: nameValid,
-            editNameValid: editNameValid,
-            emailValid: emailValid,
-            editEmailValid: editEmailValid,
-            phoneNumberValid: phoneNumberValid,
-            editPhoneNumberValid: editPhoneNumberValid}, this.validateForm);
-    }
-
-    validateForm() {
-        this.setState({formValid: this.state.nameValid && this.state.emailValid && this.state.phoneNumberValid});
-        this.setState({editFormValid: this.state.editNameValid && this.state.editEmailValid && this.state.editPhoneNumberValid});
-    }
-
-    errorClass(error) {
-        return(error.length === 0 ? '' : 'has-error')
+        });
     }
 
     handleCancel(e) {
         e.preventDefault();
-
-        let editFormErrors = this.state.editFormErrors;
-        editFormErrors.name = editFormErrors.email = editFormErrors.phoneNumber = '';
-
-        this.setState({editing: false});
-        this.setState({editFormErrors: editFormErrors});
-        this.setState({
-            editNameValid: true,
-            editEmailValid: true,
-            editPhoneNumberValid: true});
     }
 
     deleteRow(item) {
-        let participants = this.state.participants;
-        let index = participants.findIndex(({id}) => id === item.id);
-        participants.splice(index, 1);
-        this.setState(participants);
+        let scripts = this.state.scripts;
+        let index = scripts.findIndex(({id}) => id === item.id);
+        scripts.splice(index, 1);
+        this.setState(scripts);
     }
 
     editRow(item) {
         this.setState({editing: true});
-        this.setState({
-            editId: item.id,
-            editName: item.name,
-            editEmail: item.email,
-            editPhoneNumber: item.phoneNumber
-        })
     }
 
 
     updateParticipant(e) {
-        e.preventDefault();
-
-        if (!this.state.editFormValid) {
-            //
-        } else {
-            let participants = this.state.participants;
-            let index = participants.findIndex(({id}) => id === this.state.editId);
-
-            participants[index] = {
-                name: this.state.editName,
-                email: this.state.editEmail,
-                phoneNumber: this.state.editPhoneNumber
-            };
-
-            this.setState(participants);
-
-            this.setState({editing: false});
-        }
     }
 
     sortItems(key) {
         this.setState({
-            participants:this.state.participants.sort((a, b) => (
+            scripts:this.state.scripts.sort((a, b) => (
                 this.state.sort[key] === "asc" ? (a[key] < b[key] ? 1 : -1) : (a[key] > b[key] ? 1 : -1)
             )),
             sort: {
@@ -207,110 +88,51 @@ class Table extends React.Component {
         });
     }
 
-    addParticipant(e) {
+    addScript(e) {
         e.preventDefault();
 
-        if (!this.state.formValid) {
-            //
-        } else {
-            let newParticipant = {
-                id: chance.guid(),
-                name: this.state.name,
-                email: this.state.email,
-                phoneNumber: this.state.phoneNumber
-            };
+        let newScript = {
+            id: chance.guid(),
+            name: this.state.name,
+            url: this.state.url,
+        };
 
-            let participants = this.state.participants;
-            participants.push(newParticipant);
-            this.setState(participants);
+        let scripts = this.state.scripts;
+        scripts.push(newScript);
+        this.setState(scripts);
 
-            this.setState({
-                name: '',
-                email: '',
-                phoneNumber: ''
-            });
-        }
-    }
-
-    editParticipant() {
-        return (
-            <form class="form">
-                <div>
-                    <input type="text" name="editName" className="form-control"
-                            onChange = {(e) => this.change(e)}
-                            value = {this.state.editName} />
-                    <div>
-                        <span className="error-msg">{this.state.editFormErrors.name}</span>
-                    </div>
-                </div>
-                <div>
-                    <input type="text" name="editEmail" className="form-control"
-                           onChange = {(e) => this.change(e)}
-                           value = {this.state.editEmail} />
-                    <div>
-                        <span className="error-msg">{this.state.editFormErrors.email}</span>
-                    </div>
-                </div>
-                <div>
-                    <input type="text" name="editPhoneNumber" className="form-control"
-                           onChange = {(e) => this.change(e)}
-                           value = {this.state.editPhoneNumber} />
-                    <div>
-                        <span className="error-msg">{this.state.editFormErrors.phoneNumber}</span>
-                    </div>
-                </div>
-                <button type="button" className = "btn-save" onClick={(e) => {this.updateParticipant(e)}}>Save</button>
-                <button type="button" className = "btn-cancel"
-                        onClick={(e) => {this.handleCancel(e)}}>Cancel</button>
-            </form>
-        )
-    }
+        this.setState({
+            name: '',
+            url: '',
+        });
+}
 
     render() {
         return (
             <div>
-                <h1 className="heading">List of participants</h1>
+                <h1 className="heading">Script Repository</h1>
                 <div>
                     <div className="form-main">
-                        <form onSubmit={this.addParticipant} className="form">
-                            <div className={this.errorClass(this.state.formErrors.name)}>
+                        <form onSubmit={this.addScript} className="form">
+                            <div>
                                 <input type="text"
                                        required
                                        className="form-control"
                                        name="name"
                                        value={this.state.name}
-                                       placeholder="Full name"
+                                       placeholder="Script name"
                                        onChange = {(event) => this.change(event)}
                                 />
-                                <div>
-                                    <span className="error-msg">{this.state.formErrors.name}</span>
-                                </div>
                             </div>
-                            <div className={this.errorClass(this.state.formErrors.email)}>
+                            <div>
                                 <input type="text"
                                        required
                                        className="form-control"
                                        name="email"
-                                       value={this.state.email}
-                                       placeholder="E-mail address"
+                                       value={this.state.url}
+                                       placeholder="Script URL"
                                        onChange = {(event) => this.change(event)}
                                 />
-                                <div>
-                                    <span className="error-msg">{this.state.formErrors.email}</span>
-                                </div>
-                            </div>
-                            <div className={this.errorClass(this.state.formErrors.phoneNumber)}>
-                                <input type="text"
-                                       required
-                                       className="form-control"
-                                       name="phoneNumber"
-                                       value={this.state.phoneNumber}
-                                       placeholder="Phone number"
-                                       onChange = {(event) => this.change(event)}
-                                />
-                                <div>
-                                    <span className="error-msg">{this.state.formErrors.phoneNumber}</span>
-                                </div>
                             </div>
                             <button className="btn-add" type="submit">Add new</button>
                         </form>
@@ -321,27 +143,21 @@ class Table extends React.Component {
                     <tr>
                         <th onClick={() => this.sortItems('name')}>
                             <div className="header-item">
-                                <span>Name</span>
+                                <span>Script Name</span>
                                 <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['name']} className={this.state.sort["name"] === "asc" ? "sortDown" : "sortUp"} />
                             </div>
                         </th>
                         <th onClick={() => this.sortItems('email')}>
                             <div className="header-item">
-                                <span>E-mail address</span>
-                                <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['email']} className={this.state.sort["email"] === "asc" ? "sortDown" : "sortUp"} />
-                            </div>
-                        </th>
-                        <th onClick={() => this.sortItems('phoneNumber')}>
-                            <div className="header-item">
-                                <span>Phone number</span>
-                                <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['phoneNumber']} className={this.state.sort["phoneNumber"] === "asc" ? "sortDown" : "sortUp"} />
+                                <span>Script URL</span>
+                                <img src={arrow_icon} alt="sort" hidden={!this.state.isSorted['email']} className={this.state.sort["url"] === "asc" ? "sortDown" : "sortUp"} />
                             </div>
                         </th>
                         <th width="100"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.participants.map((item, index) => {
+                    {this.state.scripts.map((item, index) => {
                         return (
                             <tr key={item.id}>
                                 <td>
@@ -351,12 +167,7 @@ class Table extends React.Component {
                                 </td>
                                 <td>
                                     <div className="item">
-                                        <span>{item.email}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="item">
-                                        <span>{item.phoneNumber}</span>
+                                        <span>{item.url}</span>
                                     </div>
                                 </td>
                                 <td>
@@ -373,9 +184,7 @@ class Table extends React.Component {
                     </tbody>
                 </table>
                 <div hidden={!this.state.editing}>
-                    {
-                        this.editParticipant()
-                    }
+
                 </div>
             </div>
         );

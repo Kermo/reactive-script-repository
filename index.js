@@ -9,7 +9,7 @@ app.use(function (req, res, next) {
         host: '',
         user: '',
         password: '',
-        database: 'scriptrepository'
+        database: ''
     });
     res.locals.connection.connect();
     next();
