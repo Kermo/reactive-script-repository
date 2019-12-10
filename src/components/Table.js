@@ -31,6 +31,10 @@ class Table extends React.Component {
             editing: false,
         };
 
+        fetch('http://localhost:3000/scripts')
+            .then(response => response.json())
+            .then(scripts => (this.setState(scripts)))
+
         this.addScript = this.addScript.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.sortItems = this.sortItems.bind(this);

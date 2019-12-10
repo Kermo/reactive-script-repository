@@ -15,9 +15,18 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', index);
+app.get('/scripts', function(req, res) {
+
+    let connection = res.locals.connection.connect();
+
+    connection.query('SELECT * FROM Script', function (error, results, fields) {
+        if (error) console.log("ERROR");
+        res.send(results);
+    });
+
+   connection.end();
+});
 
 module.exports = app;
 
-let server = http.createServer(app);
-server.listen(4000);
+app.listen(4000, () => { });
